@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
@@ -17,9 +17,13 @@ function App() {
     <div className="App">
       <header className="App-header">
 
+      <Counter></Counter>
+      <Users></Users>
       
       {
-        fruits.map(fru => <Fruits>{fru}</Fruits>)
+        //fruits.map(fru => <Fruits>{fru}</Fruits>)
+        fruits.map(fru => <Fruits fruits={fru}></Fruits>)
+
       }
         
 
@@ -29,6 +33,36 @@ function App() {
       </header>
     </div>
   );
+}
+
+function Users(){
+
+  const [users, setUsers] = useState([]);
+  useEffect(()=>{
+    fetch(`https://jsonplaceholder.typicode.com/users`)
+    .then(res => res.json())
+    .then(data => setUsers(data));
+  }, [])
+  return(
+    <div>
+      <h2>Dinamic Users: {users.length}</h2>
+      {
+        users.map(users => <li>{users.name}</li>)
+      }
+    </div>
+  )
+}
+
+function Counter(){
+  const [count, setCount] = useState(0);
+  const handleIncrease = () => setCount(count + 1);
+  return (
+    <div>
+      <h1>Count: {count}</h1>
+      <button onClick={() => setCount(count + 1)}>Increase</button>
+      <button onClick={() => setCount(count - 1)}>Decrease</button>
+    </div>
+  )
 }
 
 function Fruits(props){
